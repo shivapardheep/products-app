@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "528664530677",
+    "project_id": "flutter-market-5a427",
+    "storage_bucket": "flutter-market-5a427.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:528664530677:android:fceb890e520c7c42b43fbc",
+        "android_client_info": {
+          "package_name": "com.example.flutter_shopping"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDPfXUzAaMGlo95q_oP24h0ubcice4XzWA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:528664530677:android:19c1a47d393b8d0db43fbc",
+        "android_client_info": {
+          "package_name": "com.example.test_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDPfXUzAaMGlo95q_oP24h0ubcice4XzWA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
