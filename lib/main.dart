@@ -1,6 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:test_app/presentation/screens/splash_screen.dart';
+import 'package:test_app/presentation/screens/add_products.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -8,7 +8,7 @@ void main() async {
   final ThemeData customTheme = ThemeData(
       primaryColor: Colors.red, // Change the primary color (app bar color)
       // Change the button color
-      iconTheme: const IconThemeData(color: Colors.orange),
+      iconTheme: const IconThemeData(color: Colors.black),
       inputDecorationTheme: const InputDecorationTheme(
         border: OutlineInputBorder(borderSide: BorderSide(color: Colors.green)),
       ));
@@ -29,6 +29,6 @@ void main() async {
   runApp(MaterialApp(
     theme: customTheme,
     debugShowCheckedModeBanner: false,
-    home: const SplashScreen(),
+    home: const AddProductsScreen(),
   ));
 }

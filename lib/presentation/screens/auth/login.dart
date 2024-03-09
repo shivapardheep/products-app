@@ -52,18 +52,6 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Padding(
-      //     padding: const EdgeInsets.only(left: 20, top: 10),
-      //     child: Text(
-      //       'Login',
-      //       style: TextStyle(
-      //           color: AppColor.primaryColor,
-      //           fontWeight: FontWeight.bold,
-      //           fontSize: 35),
-      //     ),
-      //   ),
-      // ),
       body: Form(
         key: _formKey,
         child: Padding(
