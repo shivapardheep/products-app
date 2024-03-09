@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:test_app/utils/app_color.dart';
 
 class AddProductsScreen extends StatefulWidget {
@@ -14,55 +17,60 @@ class _AddProductsScreenState extends State<AddProductsScreen> {
   TextEditingController descriptionController = TextEditingController();
   TextEditingController priceController = TextEditingController();
   TextEditingController discountController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-          child: Stack(
-            children: [
-              SingleChildScrollView(
-                child: Column(
-                  children: [
-                    const HeadWidget(),
-                    const SizedBox(height: 15),
-                    BodyWidget(
-                        productNameController: productNameController,
-                        descriptionController: descriptionController,
-                        priceController: priceController,
-                        discountController: discountController),
-                  ],
+          child: Form(
+            key: _formKey,
+            child: Stack(
+              children: [
+                SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      const HeadWidget(),
+                      const SizedBox(height: 15),
+                      BodyWidget(
+                          productNameController: productNameController,
+                          descriptionController: descriptionController,
+                          priceController: priceController,
+                          discountController: discountController),
+                    ],
+                  ),
                 ),
-              ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                // top: 10,
-                child: SizedBox(
-                  height: 50,
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColor.primaryColor,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  // top: 10,
+                  child: SizedBox(
+                    height: 50,
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColor.primaryColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
                       ),
-                    ),
-                    onPressed: () {
-                      // if (_formKey.currentState!.validate()) {
-                      //   _formKey.currentState!.save();
-                      //   loginFun();
-                      // Handle login logic with email and password
-                      // }
-                    },
-                    child: const Text(
-                      'ADD PRODUCT',
-                      style: TextStyle(color: Colors.white),
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          _formKey.currentState!.save();
+                          // loginFun();
+                          // Handle login logic with email and password
+                        }
+                      },
+                      child: const Text(
+                        'ADD PRODUCT',
+                        style: TextStyle(color: Colors.white),
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -70,7 +78,7 @@ class _AddProductsScreenState extends State<AddProductsScreen> {
   }
 }
 
-class BodyWidget extends StatelessWidget {
+class BodyWidget extends StatefulWidget {
   const BodyWidget({
     super.key,
     required this.productNameController,
@@ -85,26 +93,63 @@ class BodyWidget extends StatelessWidget {
   final TextEditingController discountController;
 
   @override
+  State<BodyWidget> createState() => _BodyWidgetState();
+}
+
+class _BodyWidgetState extends State<BodyWidget> {
+  File? _image;
+
+  @override
   Widget build(BuildContext context) {
+    pickImageFun() async {
+      var imageData =
+          await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (imageData != null) {
+        setState(() {
+          _image = File(imageData.path);
+        });
+      }
+    }
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
       child: Column(
         children: [
-          const PicImageWidget(),
+          _image != null
+              ? Image.file(
+                  _image!,
+                  height: 200,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                )
+              : PicImageWidget(
+                  onTap: () {
+                    pickImageFun();
+                  },
+                ),
+          _image != null
+              ? IconButton(
+                  onPressed: () {
+                    setState(() {
+                      _image = null;
+                    });
+                  },
+                  icon: const Icon(Icons.restart_alt))
+              : Container(),
           const SizedBox(height: 20),
           TextFieldWidget(
             title: "Product name",
             subTitle: "Enter your product name",
-            controller: productNameController,
+            controller: widget.productNameController,
           ),
           const SizedBox(height: 20),
           TextFieldWidget(
             title: "Product description",
             subTitle: "Enter your product brief description",
-            controller: descriptionController,
+            controller: widget.descriptionController,
             isAddress: true,
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 30),
           SizedBox(
             width: double.infinity,
             child: Wrap(
@@ -116,13 +161,13 @@ class BodyWidget extends StatelessWidget {
                   title: "price",
                   subTitle: '00,000',
                   icon: Icons.price_change_outlined,
-                  controller: priceController,
+                  controller: widget.priceController,
                 ),
                 CustomContainerWidget(
                   title: "Discount",
                   subTitle: '0%',
                   icon: Icons.discount,
-                  controller: discountController,
+                  controller: widget.discountController,
                   iconColor: Colors.deepPurple,
                   isPrice: false,
                 ),
@@ -209,6 +254,11 @@ class _CustomContainerWidgetState extends State<CustomContainerWidget> {
                         const TextStyle(fontSize: 20, color: Colors.grey),
                     border: InputBorder.none,
                   ),
+                  validator: (value) {
+                    if (value!.isEmpty && widget.isPrice) {
+                      return "please enter ${widget.title}";
+                    }
+                  },
                 ),
               ),
             ],
@@ -266,6 +316,11 @@ class TextFieldWidget extends StatelessWidget {
               hintStyle: const TextStyle(color: Colors.grey),
               border: InputBorder.none,
             ),
+            validator: (value) {
+              if (value!.isEmpty) {
+                return "please enter $title";
+              }
+            },
           ),
         ),
       ],
@@ -274,14 +329,14 @@ class TextFieldWidget extends StatelessWidget {
 }
 
 class PicImageWidget extends StatelessWidget {
-  const PicImageWidget({
-    super.key,
-  });
+  final VoidCallback onTap;
+
+  const PicImageWidget({super.key, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: onTap,
       child: SizedBox(
         child: DottedBorder(
           strokeWidth: 2.5, // Set the border width here
