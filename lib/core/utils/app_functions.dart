@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:test_app/utils/app_color.dart';
-import 'package:test_app/utils/app_strings.dart';
-import 'package:test_app/utils/navigation_function.dart';
-import 'package:test_app/utils/persistance.dart';
+import 'package:test_app/core/utils/app_color.dart';
+import 'package:test_app/core/utils/navigation_function.dart';
+import 'package:test_app/core/utils/persistance.dart';
+
+import 'app_strings.dart';
 
 class AppFunctions {
   bool isValidEmail(String email) {

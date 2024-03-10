@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:test_app/utils/navigation_function.dart';
+import 'package:test_app/core/utils/navigation_function.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -34,10 +34,10 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           child: ElevatedButton(
             onPressed: () {
-              logoutFun();
+              NavigationFun().navToAddProductScreen(context);
             },
             child: const Text(
-              'Logout',
+              'Add Products',
               style: TextStyle(color: Colors.white),
             ),
           ),

@@ -1,7 +1,7 @@
 import 'package:another_flutter_splash_screen/another_flutter_splash_screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:test_app/core/data/repositories/services.dart';
 import 'package:test_app/presentation/screens/auth/enterpin.dart';
 import 'package:test_app/presentation/screens/auth/login.dart';
 
@@ -15,8 +15,10 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   bool userLogged = false;
   checkUser() async {
-    final FirebaseAuth auth = FirebaseAuth.instance;
-    final user = auth.currentUser;
+    // final FirebaseAuth auth = FirebaseAuth.instance;
+    // final user = auth.currentUser;
+
+    final user = await ServicesFunctions().getCurrentUser();
 
     if (user != null) {
       userLogged = true;

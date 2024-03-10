@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:test_app/utils/app_color.dart';
-import 'package:test_app/utils/app_functions.dart';
-import 'package:test_app/utils/navigation_function.dart';
+import 'package:test_app/core/utils/app_color.dart';
+import 'package:test_app/core/utils/app_functions.dart';
+import 'package:test_app/core/utils/navigation_function.dart';
 
-import '../../../utils/app_strings.dart';
-import '../../../utils/persistance.dart';
+import '../../../core/utils/app_strings.dart';
+import '../../../core/utils/persistance.dart';
 
 class EnterPinScreen extends StatefulWidget {
   const EnterPinScreen({super.key});

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:test_app/presentation/screens/add_products.dart';
 import 'package:test_app/presentation/screens/auth/enterpin.dart';
 import 'package:test_app/presentation/screens/auth/setpin.dart';
 import 'package:test_app/presentation/screens/home.dart';
 
-import '../presentation/screens/auth/login.dart';
-import '../presentation/screens/auth/register.dart';
+import '../../presentation/screens/auth/login.dart';
+import '../../presentation/screens/auth/register.dart';
 
 class NavigationFun {
   navToLogin(context) {
@@ -40,5 +41,10 @@ class NavigationFun {
         context,
         MaterialPageRoute(builder: (_) => const EnterPinScreen()),
         (route) => false);
+  }
+
+  navToAddProductScreen(context) {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (_) => const AddProductsScreen()));
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:test_app/utils/app_color.dart';
-import 'package:test_app/utils/app_functions.dart';
+import 'package:test_app/core/utils/app_color.dart';
+import 'package:test_app/core/utils/app_functions.dart';
 
 class SetPinScreen extends StatefulWidget {
   const SetPinScreen({super.key});

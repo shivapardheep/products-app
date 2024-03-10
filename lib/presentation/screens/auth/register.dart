@@ -2,9 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../../../utils/app_color.dart';
-import '../../../utils/app_functions.dart';
-import '../../../utils/navigation_function.dart';
+import '../../../core/utils/app_color.dart';
+import '../../../core/utils/app_functions.dart';
+import '../../../core/utils/navigation_function.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
