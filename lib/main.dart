@@ -9,7 +9,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   final ThemeData customTheme = ThemeData(
-      primaryColor: Colors.red,
+      // primaryColor: Colors.red,
       iconTheme: const IconThemeData(color: Colors.black),
       inputDecorationTheme: InputDecorationTheme(
         border: OutlineInputBorder(

@@ -5,6 +5,7 @@ class AppColor {
   static Color greyColor = Colors.grey.shade400;
   static Color borderColor = Colors.grey.shade300;
   static Color secondGrey = const Color(0xffF8F8F8);
+  static Color containerGrey = const Color(0xffF1F1F3);
 
   //text E2DFE6
   static Color textColor2 = const Color(0xffE2DFE6);
