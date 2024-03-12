@@ -2,8 +2,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_app/core/utils/app_color.dart';
-import 'package:test_app/presentation/screens/bloc/products_bloc.dart';
+import 'package:test_app/presentation/bloc/product/products_bloc.dart';
 import 'package:test_app/presentation/screens/splash_screen.dart';
+
+import 'presentation/bloc/filter/filter_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,9 +30,8 @@ void main() async {
 
   runApp(MultiBlocProvider(
     providers: [
-      BlocProvider(
-        create: (BuildContext context) => ProductsBloc(),
-      ),
+      BlocProvider(create: (BuildContext context) => ProductsBloc()),
+      BlocProvider(create: (BuildContext context) => FilterBloc()),
     ],
     child: MaterialApp(
       theme: customTheme,

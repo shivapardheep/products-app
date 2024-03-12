@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:test_app/core/data/models/products_serilize.dart';
+import 'package:test_app/core/utils/navigation_function.dart';
 
 import '../../../core/utils/app_color.dart';
 
 class ProductCardWidget extends StatelessWidget {
-  const ProductCardWidget({
-    super.key,
-  });
+  final ProductSerialize product;
+
+  const ProductCardWidget({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       borderRadius: BorderRadius.circular(20),
-      onTap: () {},
+      onTap: () {
+        NavigationFun().navToProductDetailsScreen(context, product);
+      },
       child: Ink(
         child: Column(
           children: [
@@ -24,9 +28,12 @@ class ProductCardWidget extends StatelessWidget {
                     color: AppColor.containerGrey,
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  child: Image.network(
-                    "https://firebasestorage.googleapis.com/v0/b/flutter-market-5a427.appspot.com/o/images%2F2024-03-10%2016%3A44%3A30.622204.png?alt=media&token=97a3292e-6193-46d5-9118-7a0f1a8d8995",
-                    fit: BoxFit.cover,
+                  child: Hero(
+                    tag: product.productId,
+                    child: Image.network(
+                      product.images,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
                 Positioned(
@@ -55,18 +62,19 @@ class ProductCardWidget extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 10),
-            const SizedBox(
+            SizedBox(
               width: double.infinity,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Jacket Reffle",
-                    style: TextStyle(fontWeight: FontWeight.w400),
+                    product.name,
+                    style: const TextStyle(fontWeight: FontWeight.w400),
                   ),
                   Text(
-                    "\$799",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                    "\$${product.price}",
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 18),
                   ),
                 ],
               ),

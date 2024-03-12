@@ -3,6 +3,7 @@ import 'package:test_app/presentation/screens/add_products.dart';
 import 'package:test_app/presentation/screens/auth/enterpin.dart';
 import 'package:test_app/presentation/screens/auth/setpin.dart';
 import 'package:test_app/presentation/screens/home.dart';
+import 'package:test_app/presentation/screens/product_details.dart';
 
 import '../../presentation/screens/auth/login.dart';
 import '../../presentation/screens/auth/register.dart';
@@ -46,5 +47,12 @@ class NavigationFun {
   navToAddProductScreen(context) {
     Navigator.push(
         context, MaterialPageRoute(builder: (_) => const AddProductsScreen()));
+  }
+
+  navToProductDetailsScreen(context, product) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (_) => ProductDetailsScreen(product: product)));
   }
 }

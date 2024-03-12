@@ -10,7 +10,7 @@ import 'package:test_app/core/data/models/products.dart';
 import 'package:test_app/core/data/repositories/services.dart';
 import 'package:test_app/core/utils/app_color.dart';
 import 'package:test_app/core/utils/app_functions.dart';
-import 'package:test_app/presentation/screens/bloc/products_bloc.dart';
+import 'package:test_app/presentation/bloc/product/products_bloc.dart';
 
 class AddProductsScreen extends StatefulWidget {
   const AddProductsScreen({super.key});
@@ -111,13 +111,16 @@ class _AddProductsScreenState extends State<AddProductsScreen> {
                                 ),
                               ),
                               onPressed: () async {
-                                if (_formKey.currentState!.validate()) {
+                                if (_imagePath.isEmpty) {
+                                  AppFunctions()
+                                      .toastFun(data: "please select image");
+                                } else if (_formKey.currentState!.validate()) {
                                   _formKey.currentState!.save();
                                   User user = await ServicesFunctions()
                                       .getCurrentUser();
                                   var product = Product(
                                     name: productNameController.text,
-                                    description: productNameController.text,
+                                    description: descriptionController.text,
                                     price: double.parse(priceController.text),
                                     images: _imagePath,
                                     discount:

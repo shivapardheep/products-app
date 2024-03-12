@@ -9,12 +9,12 @@ part 'products_state.dart';
 
 class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
   ProductsBloc() : super(ProductsInitial()) {
-    on<AddProduct>((event, emit) => _addProductsFun(event, emit));
+    on<AddProduct>(_addProductsFun);
   }
 
   Future<void> _addProductsFun(
       AddProduct event, Emitter<ProductsState> emit) async {
-    emit(ProductLoading()); // Emit loading state before making the API call
+    emit(ProductLoading());
     try {
       final bool response =
           await ServicesFunctions().addProductToFireStore(event.product);
@@ -25,7 +25,7 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
       } else {
         emit(Error());
       }
-    } catch (error) {
+    } catch (_) {
       emit(Error());
     }
   }
