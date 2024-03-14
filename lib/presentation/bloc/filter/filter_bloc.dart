@@ -10,6 +10,7 @@ part 'filter_state.dart';
 class FilterBloc extends Bloc<FilterEvent, FilterState> {
   FilterBloc() : super(FilterInitial()) {
     on<FilterProducts>(_filterProducts);
+    on<QrFilterEvent>(_qrFilterProducts);
   }
 
   Future<void> _filterProducts(
@@ -20,6 +21,19 @@ class FilterBloc extends Bloc<FilterEvent, FilterState> {
           .filterDataFun(query: event.query, id: event.id);
 
       emit(FilteredData(dataList));
+    } catch (e) {
+      emit(FilterError(e.toString()));
+    }
+  }
+
+  Future<void> _qrFilterProducts(
+      QrFilterEvent event, Emitter<FilterState> emit) async {
+    emit(FilterLoading());
+    try {
+      List<ProductSerialize> dataList = await ServicesFunctions()
+          .filterDataFun(query: event.query, id: event.id);
+
+      emit(QrFilteredData(dataList));
     } catch (e) {
       emit(FilterError(e.toString()));
     }

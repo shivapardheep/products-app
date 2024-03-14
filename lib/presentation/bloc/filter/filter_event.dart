@@ -9,3 +9,10 @@ class FilterProducts extends FilterEvent {
 
   FilterProducts(this.query, this.id);
 }
+
+class QrFilterEvent extends FilterEvent {
+  final String query;
+  final bool id;
+
+  QrFilterEvent(this.query, this.id);
+}

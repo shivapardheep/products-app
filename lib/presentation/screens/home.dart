@@ -1,9 +1,12 @@
-import 'package:ai_barcode_scanner/ai_barcode_scanner.dart';
+import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_app/core/data/models/products_serilize.dart';
 import 'package:test_app/core/utils/app_color.dart';
+import 'package:test_app/core/utils/app_functions.dart';
 import 'package:test_app/core/utils/navigation_function.dart';
 import 'package:test_app/presentation/screens/widgets/product_card.dart';
 
@@ -36,15 +39,31 @@ class _HomeScreenState extends State<HomeScreen> {
   List<ProductSerialize> dataList = [];
   bool loading = false;
 
-  scanner() async {
-    return AiBarcodeScanner(
-      onScan: (String value) {
-        debugPrint(value);
-      },
-      onDetect: (BarcodeCapture barcodeCapture) {
-        debugPrint(barcodeCapture as String?);
-      },
+  String qrResponse = "";
+  scanQRCode() async {
+    String qrCode = await FlutterBarcodeScanner.scanBarcode(
+      '#00B9F1', // Border color
+      'Cancel',
+      true,
+      ScanMode.QR,
     );
+    qrResponse = qrCode;
+
+    if (qrResponse.contains("productId")) {
+      AppFunctions()
+          .toastFun(data: "Qr response : $qrResponse", positive: true);
+
+      Map<String, dynamic> response = jsonDecode(qrResponse);
+      String id = response['productId'];
+
+      context.read<FilterBloc>().add(
+            FilterProducts(id, true),
+          );
+    } else {
+      AppFunctions().toastFun(data: "Failed!, Scan again", positive: false);
+    }
+
+    // Navigator.pop(context, qrCode);
   }
 
   @override
@@ -123,18 +142,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   icon: const Icon(Icons.search)),
           IconButton(
               onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (_) => AiBarcodeScanner(
-                              onScan: (String value) {
-                                debugPrint(value);
-                              },
-                              onDetect: (BarcodeCapture barcodeCapture) {
-                                debugPrint(barcodeCapture as String?);
-                              },
-                            )));
-                // context.read<FilterBloc>().add(FilterProducts("", false));
+                scanQRCode();
               },
               icon: const Icon(Icons.qr_code_2_outlined)),
         ],
@@ -154,6 +162,13 @@ class _HomeScreenState extends State<HomeScreen> {
             if (state is FilterError) {
               loading = false;
               debugPrint("~~~ Error is : ${state.error} ");
+            }
+            if (state is QrFilteredData) {
+              loading = false;
+              ProductSerialize product = state.data[0];
+              NavigationFun().navToProductDetailsScreen(context, product);
+
+              debugPrint("~~~ Scanned data is  : ${state.data} ");
             }
             return Padding(
               padding: const EdgeInsets.only(left: 20, right: 20, top: 20),

@@ -13,6 +13,12 @@ class FilteredData extends FilterState {
   FilteredData(this.data);
 }
 
+class QrFilteredData extends FilterState {
+  final List<ProductSerialize> data;
+
+  QrFilteredData(this.data);
+}
+
 class FilterError extends FilterState {
   final String error;
 
