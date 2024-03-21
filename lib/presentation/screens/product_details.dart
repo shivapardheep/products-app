@@ -1,12 +1,16 @@
+import 'dart:convert';
 import 'dart:io';
+import 'dart:ui';
 
+import 'package:downloadsfolder/downloadsfolder.dart';
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:test_app/core/data/models/products_serilize.dart';
 import 'package:test_app/core/utils/app_color.dart';
-import 'package:test_app/core/utils/app_functions.dart';
+
+import '../../core/utils/app_functions.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
   final ProductSerialize product;
@@ -18,34 +22,73 @@ class ProductDetailsScreen extends StatefulWidget {
 
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   ScreenshotController screenshotController = ScreenshotController();
+  Future<void> _requestPermissions() async {
+    var status = await Permission.manageExternalStorage.request();
+    if (status.isGranted) {
+      debugPrint("~~~Permission Granted...");
+    } else if (status.isPermanentlyDenied) {
+      openAppSettings();
+    }
+  }
 
-  downloadQr() async {
-    var data =
-        '{"name": ${widget.product.name},"productId": ${widget.product.productId}}';
+  // downloadQr() async {
+  //   await _requestPermissions();
+  //   var data =
+  //       '{"name": ${widget.product.name},"productId": ${widget.product.productId}}';
+  //
+  //   /// start
+  //   final qrPainter = QrPainter(
+  //     data: data,
+  //     version: QrVersions.auto,
+  //     // size: 200.0,
+  //     gapless: false,
+  //     errorCorrectionLevel: QrErrorCorrectLevel.H,
+  //   );
+  //   final downloadDirectory = await getDownloadsDirectory();
+  //
+  //   final image = await qrPainter.toImage(200);
+  //   final bytes = await image.toByteData(format: ImageByteFormat.png);
+  //   String filename = '${DateTime.now().toString()}.png';
+  //   final file = File('${downloadDirectory!.path}/$filename');
+  //
+  //   var res = await file.writeAsBytes(bytes!.buffer.asUint8List());
+  //   print('~~~ path  ${file.path}');
+  //
+  //   print('QR Image saved to $res');
+  //   AppFunctions().toastFun(data: "QR Image saved to ($res)", positive: true);
+  // }
 
-    // final status = await Permission.manageExternalStorage.request();
+  // String qrCode = '{"name": "red shirt","productId": "sDXQLpMEsmFhF8gJKmPY"}';
 
-    final image = await screenshotController.captureFromWidget(QrImageView(
+  Future<void> _downloadQRCode() async {
+    var jsonData = {
+      "name": widget.product.name.toString(),
+      "productId": widget.product.productId.toString()
+    };
+    debugPrint("~~~ : $jsonData");
+    debugPrint("~~~ : ${jsonEncode(jsonData)}");
+    String data = jsonEncode(jsonData);
+    final qrPainter = QrPainter(
       data: data,
       version: QrVersions.auto,
-      size: 200.0,
-    ));
-    final directory = await getDownloadsDirectory();
+      // size: 200.0,
+      gapless: false,
+      errorCorrectionLevel: QrErrorCorrectLevel.H,
+    );
+    String? downloadDirectoryPath = await getDownloadDirectoryPath();
 
-    // final customDirectory = Directory("/storage/emulated/0/Download");
-    debugPrint("~~ path 2: $directory");
-
-    // Generate unique filename with preferred extension
-    final filename = '${DateTime.now().toString()}.png';
-    final path = '${directory!.path}/$filename';
-    //
-    // Save image to disk (using File)
-    final file = File(path);
-    await file.writeAsBytes(image); // Corrected line
-
-    print('QR Image saved to $path');
+    final image = await qrPainter.toImage(200);
+    final bytes = await image.toByteData(format: ImageByteFormat.png);
+    String filename = removeSpaces(DateTime.now().toString());
+    final file = File('$downloadDirectoryPath/$filename.png');
+    var res = await file.writeAsBytes(bytes!.buffer.asUint8List());
+    debugPrint("~~~ file: ${file}");
     AppFunctions().toastFun(data: "QR Image saved", positive: true);
-    // }
+  }
+
+  // removing space and special symbols
+  String removeSpaces(String text) {
+    return text.replaceAll(RegExp(r"\s|-|:"), "");
   }
 
   @override
@@ -173,9 +216,11 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               borderRadius: BorderRadius.circular(50),
                               color: Colors.purple,
                             ),
+                            // shiva12345
                             child: IconButton(
                                 onPressed: () {
-                                  downloadQr();
+                                  // downloadQr();
+                                  _downloadQRCode();
                                 },
                                 icon: const Icon(Icons.download)),
                           ),

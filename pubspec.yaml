@@ -54,6 +54,8 @@ dependencies:
   path_provider: ^2.1.2
   cached_network_image: ^3.3.1
   flutter_barcode_scanner: ^2.0.0
+  downloadsfolder: ^0.1.1
+
 
 
 

@@ -26,7 +26,6 @@ class ServicesFunctions {
   }
 
   Future<bool> addProductToFireStore(Product product) async {
-    debugPrint("~~~ final");
     final FirebaseFirestore fireStore = FirebaseFirestore.instance;
     final CollectionReference productsCollection =
         fireStore.collection('products');
@@ -48,6 +47,29 @@ class ServicesFunctions {
     };
     try {
       await productsCollection.doc(productId).set(productData);
+
+      return true;
+    } catch (e) {
+      debugPrint("~~~ error is : ${e.toString()}");
+
+      return false;
+    }
+  }
+
+  Future<bool> addLogsToFireStore(String log, String userId) async {
+    final FirebaseFirestore fireStore = FirebaseFirestore.instance;
+    final CollectionReference collectionRef = fireStore.collection('logs');
+
+    // Generate a unique product ID
+    final String productId = collectionRef.doc().id;
+
+    final logData = {
+      'userId': userId,
+      'log': log,
+    };
+    try {
+      await collectionRef.doc(productId).set(logData);
+      debugPrint("log added successfully..");
 
       return true;
     } catch (e) {

@@ -10,7 +10,9 @@ import 'package:test_app/core/utils/app_functions.dart';
 import 'package:test_app/core/utils/navigation_function.dart';
 import 'package:test_app/presentation/screens/widgets/product_card.dart';
 
+import '../../core/data/repositories/services.dart';
 import '../bloc/filter/filter_bloc.dart';
+import '../bloc/product/products_bloc.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -41,26 +43,33 @@ class _HomeScreenState extends State<HomeScreen> {
 
   String qrResponse = "";
   scanQRCode() async {
-    String qrCode = await FlutterBarcodeScanner.scanBarcode(
-      '#00B9F1', // Border color
-      'Cancel',
-      true,
-      ScanMode.QR,
-    );
-    qrResponse = qrCode;
+    try {
+      String qrCode = await FlutterBarcodeScanner.scanBarcode(
+        '#00B9F1', // Border color
+        'Cancel',
+        true,
+        ScanMode.QR,
+      );
+      qrResponse = qrCode.toString();
 
-    if (qrResponse.contains("productId")) {
-      AppFunctions()
-          .toastFun(data: "Qr response : $qrResponse", positive: true);
+      if (qrResponse.contains("productId")) {
+        Map<String, dynamic> response = jsonDecode(qrResponse);
+        String id = response['productId'];
+        AppFunctions()
+            .toastFun(data: "Qr Scanned : ${response['name']}", positive: true);
 
-      Map<String, dynamic> response = jsonDecode(qrResponse);
-      String id = response['productId'];
+        context.read<FilterBloc>().add(
+              QrFilterEvent(id, true),
+            );
+      } else {
+        AppFunctions().toastFun(data: "Failed!, Scan again", positive: false);
+      }
+    } catch (e) {
+      AppFunctions().toastFun(data: "Error!,${e.toString()}", positive: false);
+      User user = await ServicesFunctions().getCurrentUser();
 
-      context.read<FilterBloc>().add(
-            FilterProducts(id, true),
-          );
-    } else {
-      AppFunctions().toastFun(data: "Failed!, Scan again", positive: false);
+      BlocProvider.of<ProductsBloc>(context)
+          .add(AddLog(e.toString(), user.uid.toString()));
     }
 
     // Navigator.pop(context, qrCode);
@@ -166,7 +175,9 @@ class _HomeScreenState extends State<HomeScreen> {
             if (state is QrFilteredData) {
               loading = false;
               ProductSerialize product = state.data[0];
-              NavigationFun().navToProductDetailsScreen(context, product);
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                NavigationFun().navToProductDetailsScreen(context, product);
+              });
 
               debugPrint("~~~ Scanned data is  : ${state.data} ");
             }

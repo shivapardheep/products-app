@@ -8,3 +8,10 @@ class AddProduct extends ProductsEvent {
 
   AddProduct(this.product);
 }
+
+class AddLog extends ProductsEvent {
+  final String log;
+  final String userId;
+
+  AddLog(this.log, this.userId);
+}

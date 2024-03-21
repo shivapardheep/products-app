@@ -10,6 +10,7 @@ part 'products_state.dart';
 class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
   ProductsBloc() : super(ProductsInitial()) {
     on<AddProduct>(_addProductsFun);
+    on<AddLog>(_addLogFun);
   }
 
   Future<void> _addProductsFun(
@@ -25,6 +26,14 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
       } else {
         emit(Error());
       }
+    } catch (_) {
+      emit(Error());
+    }
+  }
+
+  Future<void> _addLogFun(AddLog event, Emitter<ProductsState> emit) async {
+    try {
+      await ServicesFunctions().addLogsToFireStore(event.log, event.userId);
     } catch (_) {
       emit(Error());
     }
