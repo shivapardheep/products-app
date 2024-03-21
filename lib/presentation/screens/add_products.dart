@@ -12,6 +12,8 @@ import 'package:test_app/core/utils/app_color.dart';
 import 'package:test_app/core/utils/app_functions.dart';
 import 'package:test_app/presentation/bloc/product/products_bloc.dart';
 
+import '../bloc/filter/filter_bloc.dart';
+
 class AddProductsScreen extends StatefulWidget {
   const AddProductsScreen({super.key});
 
@@ -63,6 +65,8 @@ class _AddProductsScreenState extends State<AddProductsScreen> {
             loading = false;
             AppFunctions()
                 .toastFun(data: "Product added successfully", positive: true);
+            context.read<FilterBloc>().add(FilterProducts("", false));
+
             clearAllFields();
           }
           if (state is Error) {
