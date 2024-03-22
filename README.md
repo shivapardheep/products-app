@@ -28,9 +28,12 @@ PRODUCTS APP
             flutter_barcode_scanner: ^2.0.0
             downloadsfolder: ^0.1.1
 
+```markdown
   How to run App ?
         * flutter clean
         * flutter pub get
         * flutter run
+```
+
 
         
