@@ -1,11 +1,11 @@
-PRODUCTS APP
+## PRODUCTS APP
 
    version destails:
          * Flutter 3.19.2
          * Dart 3.3.0
 
          
-  packages:
+ ## packages:
             cupertino_icons: ^1.0.6
             firebase_core: ^2.27.0
             firebase_auth: ^4.17.8
@@ -28,8 +28,8 @@ PRODUCTS APP
             flutter_barcode_scanner: ^2.0.0
             downloadsfolder: ^0.1.1
 
+  ## How to run App ?
 ```markdown
-  How to run App ?
         * flutter clean
         * flutter pub get
         * flutter run
